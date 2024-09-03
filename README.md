@@ -32,6 +32,9 @@ Explanation of the Script
 Important Notes
 
   Run as Root: Make sure to run the script with root privileges using sudo.
+  
   Legal and Ethical Considerations: Ensure you have permission to perform these actions on the network.
+  
   Monitor Mode: Ensure your wireless card supports monitor mode and is set up correctly.
+  
   Error Handling: You may want to add error handling for better robustness, especially when dealing with network interfaces.
