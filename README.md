@@ -23,6 +23,7 @@ Before running the script, you can set your wireless interface to monitor mode m
 Explanation of the Script
 
   Setting Monitor Mode: You need to set your wireless interface to monitor mode manually before running the script.
+  
   Packet Creation: The send_deauth function creates a deauthentication packet for the specified BSSID and sends it using scapy.sendp.
 
   Network Scanning: The scan_networks function captures packets, extracts the BSSID and SSID, and stores them in the scanned_networks list.
